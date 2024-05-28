@@ -20,6 +20,21 @@ pipeline {
                 sh './$VENV_DIR/bin/pytest'
             }
         }
+        stage('Run App') {
+            steps {
+                // Run app.py and save output to a file
+                sh './$VENV_DIR/bin/python app.py > output.log'
+            }
+        }
+        stage('Read Output') {
+            steps {
+                // Read the output.log file and display its contents
+                script {
+                    def output = readFile('output.log').trim()
+                    echo "Output from app.py: ${output}"
+                }
+            }
+        }
     }
     post {
         success {
